@@ -1,23 +1,3 @@
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-% e) TA Slot Assignment Predicate
-
 ta_slot_assignment([ta(HT,HN)|TT],RemTAs,Name):-
 	HT = Name,!,
     HN1 is HN-1,
