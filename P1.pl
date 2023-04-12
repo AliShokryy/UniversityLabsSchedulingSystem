@@ -16,9 +16,6 @@
 
 
 
-
-
-
 % e)
 
 ta_slot_assignment([ta(HT,HN)|TT],RemTAs,Name):-
