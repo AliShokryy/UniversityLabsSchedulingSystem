@@ -1,11 +1,11 @@
 ta_slot_assignment([ta(HT,HN)|TT],RemTAs,Name):-
-	HT = Name,!,
+	HT = Name,
     HN1 is HN-1,
     HN1 >= 0,
 	RemTAs = [ta(HT,HN1)|TT].
 	
 ta_slot_assignment([ta(HT,HTN)|TT],[ta(HT,HTN)|TR],Name):-
-	HT \= Name,!,
+	HT \= Name,
 	ta_slot_assignment(TT,TR,Name).
 
 %Edone
