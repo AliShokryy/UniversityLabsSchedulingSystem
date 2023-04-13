@@ -46,3 +46,12 @@ maxSlot_helper3(E,[H|T],Count,Max):-
     \+member(E,H),
     maxSlot_helper3(E,T,Count,Max).    
 %Cdone
+day_schedule(DaySlots,TAs,RemTAs,Assignment):-
+    day_helper(DaySlots,TAs,RemTAs,[],Assignment).
+
+day_helper([],TAs,TAs,Acc,Assignment):-reverse(Acc,Assignment).
+day_helper([H|T],TAs,RemTAs,Acc,Assignment):-
+    slot_assignment(H,TAs,RemTAs1,Assignment1),
+    NAcc=[Assignment1|Acc],
+    day_helper(T,RemTAs1,RemTAs,NAcc,Assignment).
+%Bdone
