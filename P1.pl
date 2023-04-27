@@ -9,19 +9,31 @@ ta_slot_assignment([ta(HT,HTN)|TT],[ta(HT,HTN)|TR],Name):-
 	ta_slot_assignment(TT,TR,Name).
 
 %Edone
+
+comb(0,_,[]).
+comb(N,L,[H|T]) :- 
+   N > 0,
+   element(H,L,Res), 
+   N1 is N-1, 
+   comb(N1,Res,T).
+
+element(H,[H|T],T).
+element(E,[_|T],Res):- 
+   element(E,T,Res).
+
+
 slot_assignment(LabsNum,TAs,RemTAs,Assignment):-
-	permutation(TAs,P),
-	slot_assignment_helper(LabsNum,P,P,RemTAs,Assignment).
-	
-slot_assignment_helper(0,_,RemTAs,RemTAs,[]).	
-	
-slot_assignment_helper(LabsNum,TAs,RemTAsT,RemTAs,Assignment):-
-	LabsNumNew is LabsNum-1,
-	TAs = [ta(HN,_)|TTT],
-	ta_slot_assignment(RemTAsT,RemTAsNEW,HN),
-	slot_assignment_helper(LabsNumNew,TTT,RemTAsNEW,RemTAs,TAssignment),
-	Assignment = [HN | TAssignment].
+	comb(LabsNum,TAs,C),
+    slot_assignment_helper(C,TAs,RemTAs,[],Assignment).
+
+slot_assignment_helper([],RemTAs,RemTAs,Assignment,Assignment).
+slot_assignment_helper([ta(Name,_)|T],TAs,RemTAs,AssignmentAcc,Assignment):-
+    ta_slot_assignment(TAs,RemTAsNew,Name),
+    append(AssignmentAcc,[Name],AssignmentAccNew),
+    slot_assignment_helper(T,RemTAsNew,RemTAs,AssignmentAccNew,Assignment).
+
 %DDone
+
 max_slots_per_day(DaySched,Max):-
     maxSlot_helper1(DaySched,TAs),
     maxSlot_helper2(TAs,DaySched,Max,App),
@@ -44,8 +56,10 @@ maxSlot_helper3(E,[H|T],Count,Max):-
     Count is Count1+1.
 maxSlot_helper3(E,[H|T],Count,Max):-
     \+member(E,H),
-    maxSlot_helper3(E,T,Count,Max).    
+    maxSlot_helper3(E,T,Count,Max). 
+
 %Cdone
+
 day_schedule(DaySlots,TAs,RemTAs,Assignment):-
     day_helper(DaySlots,TAs,RemTAs,[],Assignment).
 
@@ -54,4 +68,14 @@ day_helper([H|T],TAs,RemTAs,Acc,Assignment):-
     slot_assignment(H,TAs,RemTAs1,Assignment1),
     NAcc=[Assignment1|Acc],
     day_helper(T,RemTAs1,RemTAs,NAcc,Assignment).
+
 %Bdone
+
+week_schedule([],_,_,[]).
+week_schedule([H|T],TAs,DayMax,WeekSched):-
+    day_schedule(H,TAs,RemTAs,Assignment),
+    max_slots_per_day(Assignment,DayMax),
+    week_schedule(T,RemTAs,DayMax,WeekSched2),
+    WeekSched=[Assignment|WeekSched2].
+
+%Adone
