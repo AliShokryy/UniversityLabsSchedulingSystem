@@ -26,7 +26,9 @@ slot_assignment(LabsNum,TAs,RemTAs,Assignment):-
 	comb(LabsNum,TAs,C),
     slot_assignment_helper(C,TAs,RemTAs,[],Assignment).
 
-slot_assignment_helper([],RemTAs,RemTAs,Assignment,Assignment).
+%slot_assignment_helper([],RemTAs,RemTAs,Assignment,Assignment).
+slot_assignment_helper([],RemTAs,RemTAs,AssignmentAcc,Assignment):-
+    permutation(AssignmentAcc,Assignment).
 slot_assignment_helper([ta(Name,_)|T],TAs,RemTAs,AssignmentAcc,Assignment):-
     ta_slot_assignment(TAs,RemTAsNew,Name),
     append(AssignmentAcc,[Name],AssignmentAccNew),
@@ -34,6 +36,7 @@ slot_assignment_helper([ta(Name,_)|T],TAs,RemTAs,AssignmentAcc,Assignment):-
 
 %DDone
 
+max_slots_per_day([[],[],[],[],[]],_).
 max_slots_per_day(DaySched,Max):-
     maxSlot_helper1(DaySched,TAs),
     maxSlot_helper2(TAs,DaySched,Max,App),
