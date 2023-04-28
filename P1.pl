@@ -13,13 +13,13 @@ ta_slot_assignment([ta(HT,HTN)|TT],[ta(HT,HTN)|TR],Name):-
 comb(0,_,[]).
 comb(N,L,[H|T]) :- 
    N > 0,
-   element(H,L,Res), 
+   comb_helper(H,L,Res), 
    N1 is N-1, 
    comb(N1,Res,T).
 
-element(H,[H|T],T).
-element(E,[_|T],Res):- 
-   element(E,T,Res).
+comb_helper(H,[H|T],T).
+comb_helper(E,[_|T],Res):- 
+   comb_helper(E,T,Res).
 
 
 slot_assignment(LabsNum,TAs,RemTAs,Assignment):-
